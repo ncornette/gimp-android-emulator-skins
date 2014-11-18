@@ -1,0 +1,151 @@
+
+parts {
+   device {
+        display {
+            width   320
+            height  480
+            x       0
+            y       0
+        }
+    }
+    
+    portrait {
+        background {
+            image   background_port.png
+        }
+
+        buttons {
+            
+            volume-up {
+                image   volume-up_port.png
+                x       60
+                y       132
+            }
+            phone-dial {
+                image   phone-dial_port.png
+                x       94
+                y       695
+            }
+            phone-hangup {
+                image   phone-hangup_port.png
+                x       357
+                y       695
+            }
+            soft-left {
+                image   soft-left_port.png
+                x       314
+                y       645
+            }
+            search {
+                image   search_port.png
+                x       93
+                y       645
+            }
+            back {
+                image   back_port.png
+                x       373
+                y       645
+            }
+            volume-down {
+                image   volume-down_port.png
+                x       60
+                y       217
+            }
+            home {
+                image   home_port.png
+                x       152
+                y       645
+            }
+        }
+    }
+    
+    landscape {
+        background {
+            image   background_land.png
+        }
+
+        buttons {
+            
+            home {
+                image   home_land.png
+                x       645
+                y       306
+            }
+            back {
+                image   back_land.png
+                x       645
+                y       85
+            }
+            soft-left {
+                image   soft-left_land.png
+                x       645
+                y       144
+            }
+            volume-down {
+                image   volume-down_land.png
+                x       217
+                y       447
+            }
+            search {
+                image   search_land.png
+                x       645
+                y       365
+            }
+            volume-up {
+                image   volume-up_land.png
+                x       132
+                y       447
+            }
+            phone-dial {
+                image   phone-dial_land.png
+                x       695
+                y       350
+            }
+            phone-hangup {
+                image   phone-hangup_land.png
+                x       695
+                y       87
+            }
+        }
+    }
+}
+
+layouts {
+    portrait {
+        width     526
+        height    880 
+        color     0x555555
+        
+        part1 {
+            name    portrait
+            x       0
+            y       0
+        }
+
+        part2 {
+            name    device
+            x       107
+            y       150
+        }
+    }
+    
+    landscape {
+        width     880
+        height    526
+        color     0x555555
+        
+        part1 {
+            name    landscape
+            x       0
+            y       0
+        }
+
+        part2 {
+            name   device
+            x      150
+            y      419
+            rotation 3
+        }
+    }
+}
+

@@ -1,0 +1,111 @@
+
+parts {
+   device {
+        display {
+            width   480
+            height  800
+            x       0
+            y       0
+        }
+    }
+    
+    portrait {
+        background {
+            image   background_port.png
+        }
+
+        buttons {
+            
+            soft-left {
+                image   soft-left_port.png
+                x       229
+                y       949
+            }
+            search {
+                image   search_port.png
+                x       472
+                y       949
+            }
+            back {
+                image   back_port.png
+                x       106
+                y       949
+            }
+            home {
+                image   home_port.png
+                x       350
+                y       949
+            }
+        }
+    }
+    
+    landscape {
+        background {
+            image   background_land.png
+        }
+
+        buttons {
+            
+            home {
+                image   home_land.png
+                x       949
+                y       230
+            }
+            back {
+                image   back_land.png
+                x       949
+                y       474
+            }
+            soft-left {
+                image   soft-left_land.png
+                x       949
+                y       351
+            }
+            search {
+                image   search_land.png
+                x       949
+                y       108
+            }
+        }
+    }
+}
+
+layouts {
+    portrait {
+        width     640
+        height    1226 
+        color     0x555555
+        
+        part1 {
+            name    portrait
+            x       0
+            y       0
+        }
+
+        part2 {
+            name    device
+            x       79
+            y       136
+        }
+    }
+    
+    landscape {
+        width     1226
+        height    640
+        color     0x555555
+        
+        part1 {
+            name    landscape
+            x       0
+            y       0
+        }
+
+        part2 {
+            name   device
+            x      136
+            y      561
+            rotation 3
+        }
+    }
+}
+

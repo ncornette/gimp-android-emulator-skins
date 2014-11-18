@@ -191,17 +191,18 @@ def skin_scale(image, target_density):
     pdb.gimp_image_insert_layer(image, hardware_layer_copy, None, 0)
     pdb.gimp_text_layer_set_text(hardware_layer_copy, hardware_config_scaled)
 
-def skin_landscape(image):
-    portrait = [l for l in image.layers if l.name == 'portrait'][0]
-    landscape = pdb.gimp_layer_copy(portrait, True)
+def skin_landscape(image, layer):
+    landscape = pdb.gimp_layer_copy(layer, True)
     pdb.gimp_image_insert_layer(image, landscape, None, 0)
     pdb.gimp_item_transform_rotate_simple(landscape, 2, False, image.width/2, image.height/2)
-    landscape.name = 'landscape'
-    landscape = [l for l in image.layers if l.name == 'landscape'][0]
+    landscape.name = layer.name.replace('portrait','landscape')
+
+    #Retrieve landscape layer as a LayerGroup
+    landscape = [l for l in image.layers if l.name == landscape.name][0]
     for l in landscape.layers:
         l.name = re.sub('(.*)(_port)(\.\w*) ?#?.*', '\\1_land\\3', l.name)
 
-def skin_resize(image, ratio_string):
+def skin_resize(image, ratio_string='4/3'):
     ratio = map(float, ratio_string.split('/'))
     ratio = ratio[0]/ratio[1]
     background_port = pdb.gimp_image_get_layer_by_name(image, 'background_port.png')
@@ -212,9 +213,15 @@ def skin_resize(image, ratio_string):
 def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0):
 
     image = pdb.gimp_image_duplicate(image_source)
-    
+
+    for l in image.layers:
+        if not l.name in ('hardware.ini','overlay.png', 'portrait'):
+            # Hide unrelevant layers
+            pdb.gimp_item_set_visible(l, False)
+
+    layer_group_portrait = [l for l in image.layers if l.name == 'portrait'][0]
     if scale_index: skin_scale(image, DENSITIES[scale_index][0])
-    if not pdb.gimp_image_get_layer_by_name(image, 'landscape'): skin_landscape(image)
+    if not pdb.gimp_image_get_layer_by_name(image, 'landscape'): skin_landscape(image, layer_group_portrait)
     if ratio_index: skin_resize(image, SKIN_RATIOS[ratio_index])
 
     layers = list(flatten_layers(image))

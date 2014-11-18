@@ -1,0 +1,113 @@
+{
+  "layers": {
+    "background_land.png": {
+      "width": 1226, 
+      "height": 640, 
+      "offsets": [
+        -293, 
+        293
+      ]
+    }, 
+    "home_land.png": {
+      "width": 60, 
+      "height": 60, 
+      "offsets": [
+        656, 
+        523
+      ]
+    }, 
+    "screen_land.png": {
+      "width": 800, 
+      "height": 480, 
+      "offsets": [
+        -157, 
+        374
+      ]
+    }, 
+    "back_land.png": {
+      "width": 60, 
+      "height": 60, 
+      "offsets": [
+        656, 
+        767
+      ]
+    }, 
+    "back_port.png": {
+      "width": 60, 
+      "height": 60, 
+      "offsets": [
+        106, 
+        949
+      ]
+    }, 
+    "overlay.png": {
+      "width": 480, 
+      "height": 800, 
+      "offsets": [
+        79, 
+        136
+      ]
+    }, 
+    "search_land.png": {
+      "width": 60, 
+      "height": 60, 
+      "offsets": [
+        656, 
+        401
+      ]
+    }, 
+    "background_port.png": {
+      "width": 640, 
+      "height": 1226, 
+      "offsets": [
+        0, 
+        0
+      ]
+    }, 
+    "soft-left_port.png": {
+      "width": 60, 
+      "height": 60, 
+      "offsets": [
+        229, 
+        949
+      ]
+    }, 
+    "search_port.png": {
+      "width": 60, 
+      "height": 60, 
+      "offsets": [
+        472, 
+        949
+      ]
+    }, 
+    "soft-left_land.png": {
+      "width": 60, 
+      "height": 60, 
+      "offsets": [
+        656, 
+        644
+      ]
+    }, 
+    "home_port.png": {
+      "width": 60, 
+      "height": 60, 
+      "offsets": [
+        350, 
+        949
+      ]
+    }, 
+    "screen_port.png": {
+      "width": 480, 
+      "height": 800, 
+      "offsets": [
+        79, 
+        136
+      ]
+    }
+  }, 
+  "image": {
+    "width": 640, 
+    "name": "Untitled", 
+    "height": 1226
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "layers": {
+    "overlay.png": {
+      "width": 526, 
+      "height": 880, 
+      "offsets": [
+        0, 
+        0
+      ]
+    }, 
+    "phone-dial_port.png": {
+      "width": 82, 
+      "height": 50, 
+      "offsets": [
+        94, 
+        695
+      ]
+    }, 
+    "background_land.png": {
+      "width": 880, 
+      "height": 526, 
+      "offsets": [
+        -177, 
+        177
+      ]
+    }, 
+    "home_land.png": {
+      "width": 66, 
+      "height": 68, 
+      "offsets": [
+        468, 
+        483
+      ]
+    }, 
+    "volume-up_port.png": {
+      "width": 19, 
+      "height": 100, 
+      "offsets": [
+        60, 
+        132
+      ]
+    }, 
+    "screen_land.png": {
+      "width": 480, 
+      "height": 320, 
+      "offsets": [
+        -27, 
+        276
+      ]
+    }, 
+    "back_land.png": {
+      "width": 66, 
+      "height": 68, 
+      "offsets": [
+        468, 
+        262
+      ]
+    }, 
+    "back_port.png": {
+      "width": 68, 
+      "height": 66, 
+      "offsets": [
+        373, 
+        645
+      ]
+    }, 
+    "phone-hangup_land.png": {
+      "width": 50, 
+      "height": 82, 
+      "offsets": [
+        518, 
+        264
+      ]
+    }, 
+    "background_port.png": {
+      "width": 526, 
+      "height": 880, 
+      "offsets": [
+        0, 
+        0
+      ]
+    }, 
+    "soft-left_port.png": {
+      "width": 68, 
+      "height": 66, 
+      "offsets": [
+        314, 
+        645
+      ]
+    }, 
+    "search_land.png": {
+      "width": 66, 
+      "height": 68, 
+      "offsets": [
+        468, 
+        542
+      ]
+    }, 
+    "volume-up_land.png": {
+      "width": 100, 
+      "height": 19, 
+      "offsets": [
+        -45, 
+        624
+      ]
+    }, 
+    "phone-hangup_port.png": {
+      "width": 82, 
+      "height": 50, 
+      "offsets": [
+        357, 
+        695
+      ]
+    }, 
+    "screen_port.png": {
+      "width": 320, 
+      "height": 480, 
+      "offsets": [
+        107, 
+        150
+      ]
+    }, 
+    "search_port.png": {
+      "width": 68, 
+      "height": 66, 
+      "offsets": [
+        93, 
+        645
+      ]
+    }, 
+    "soft-left_land.png": {
+      "width": 66, 
+      "height": 68, 
+      "offsets": [
+        468, 
+        321
+      ]
+    }, 
+    "volume-down_port.png": {
+      "width": 19, 
+      "height": 100, 
+      "offsets": [
+        60, 
+        217
+      ]
+    }, 
+    "home_port.png": {
+      "width": 68, 
+      "height": 66, 
+      "offsets": [
+        152, 
+        645
+      ]
+    }, 
+    "phone-dial_land.png": {
+      "width": 50, 
+      "height": 82, 
+      "offsets": [
+        518, 
+        527
+      ]
+    }, 
+    "volume-down_land.png": {
+      "width": 100, 
+      "height": 19, 
+      "offsets": [
+        40, 
+        624
+      ]
+    }
+  }, 
+  "image": {
+    "width": 526, 
+    "name": "Untitled", 
+    "height": 880
+  }
+}
