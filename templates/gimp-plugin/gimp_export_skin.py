@@ -16,6 +16,8 @@ import os
 import json
 from pipes import quote
 from string import Template
+from collections import namedtuple
+from collections import OrderedDict
 
 DENSITIES = (
     # name, (density, min, max)
@@ -110,61 +112,85 @@ BUTTON = Template("""
                 y       ${button_y}
             }""")
 
+def get_dict(obj, *fields):
+    return OrderedDict([(k,getattr(obj,k)) for k in fields])
+
+class GimpJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if hasattr(obj,'offsets') and hasattr(obj,'layers'): # gimp.GroupLayer
+            return get_dict(obj, 'name','visible','width','height','offsets', 'layers')
+        if hasattr(obj,'layers'): # gimp.Image
+            return get_dict(obj, 'name','width','height','layers')
+        if hasattr(obj,'offsets'): # gimp.Layer
+            return get_dict(obj, 'name','visible','width','height','offsets')
+        return json.JASONEncoder.default(self, obj)
+
 class LayerNameError(Exception):
     pass
+
+
+def find_layers(group, name):
+    return [l for l in group.layers if re.match(name, l.name)]
+
+def find_layer(group, name):
+    layers = find_layers(group, name)
+    return layers and layers[0] or None
+
+_json_object_hook = lambda d: namedtuple('X', d.keys())(*d.values())
+json2obj = lambda data: json.loads(data, object_hook=_json_object_hook)    
 
 def convert_skin_layout(source, destination):
 
     with open(source, 'r') as f:
-        layout = json.loads(f.read())
- 
-    image = layout['image']
-    layers = layout['layers']
-    background = dict(land = layers.pop('background_land.png'), port = layers.pop('background_port.png'))
-    screen_land = layers.pop('screen_land.png')
-    screen_port = layers.pop('screen_port.png')
-    if layers.has_key('overlay.png'): layers.pop('overlay.png')
-    buttons = dict(land = [],port = [])
+        image = json2obj(f.read())
+    
+    port_layers = find_layer(image, 'portrait')
+    land_layers = find_layer(image, 'landscape')
+    screen_port = find_layer(port_layers, 'screen_port.png')
+    screen_land = find_layer(land_layers, 'screen_land.png')
+    background_port = find_layer(port_layers, 'background_port.png')
+    background_land = find_layer(land_layers, 'background_land.png')
 
-    offset_x = lambda layer,orientation: layer['offsets'][0] - background[orientation]['offsets'][0]
-    offset_y = lambda layer,orientation: layer['offsets'][1] - background[orientation]['offsets'][1]
+    skin_layout = {}
+    skin_layout['screen_port_width']=screen_port.width
+    skin_layout['screen_port_height']=screen_port.height
+
+    skin_layout['background_port_width']  = background_port.width
+    skin_layout['background_port_height'] = background_port.height
+    skin_layout['background_land_width']  = background_land.width
+    skin_layout['background_land_height'] = background_land.height
+    
+    skin_layout['screen_port_x'] = screen_port.offsets[0] - background_port.offsets[0]
+    skin_layout['screen_port_y'] = screen_port.offsets[1] - background_port.offsets[1]
+    skin_layout['screen_land_x'] = screen_land.offsets[0] - background_land.offsets[0]
+    skin_layout['screen_land_y'] = screen_land.offsets[1] - background_land.offsets[1] + screen_land.height
 
     fullname_parser = re.compile('^(.*)_(\w*)\.?.*$')
-    for layername,layer in layers.iteritems():
+    
+    button_layers = find_layers(port_layers, '[^(background|screen)]') + find_layers(land_layers, '[^(background|screen)]')
+
+    buttons = dict(land = [],port = [])
+
+    for layer in button_layers:
         try:
-            button_name, orientation = fullname_parser.findall(layername)[0]
+            button_name, orientation = fullname_parser.findall(layer.name)[0]
             orientation = orientation[:4].lower()
-            buttons[orientation].append(BUTTON.substitute({'button_name':button_name,'orientation':orientation,'button_x':offset_x(layer, orientation),'button_y':offset_y(layer, orientation)}))
-        except:
-            msg = """Cannot identify button layer with name: 
-"%s" 
-
-Name must be like: "<button_key>_port.png" or "<button_key>_land.png".
-
-Consider also hidding any unrelevant layer.""" % layername
-            raise LayerNameError(msg)
-        
+            background_layer = orientation == 'port' and background_port or background_land
+            buttons[orientation].append(BUTTON.substitute({
+                'button_name':button_name,
+                'orientation':orientation,
+                'button_x': layer.offsets[0] - background_layer.offsets[0],
+                'button_y': layer.offsets[1] - background_layer.offsets[1]}))
+        except e:
+            raise LayerNameError(e, """Cannot identify button layer with name: \n"%s"\n\nName must be like: "<button_key>_port.png" or "<button_key>_land.png".\n\n""" % layer.name)
+    
+    skin_layout['buttons_port'] = ''.join(buttons['port'])
+    skin_layout['buttons_land'] = ''.join(buttons['land'])
+                
     with open(destination, 'w') as f:
+        f.write(LAYOUT.substitute(skin_layout))
 
-        f.write(LAYOUT.substitute(
-            {
-            'background_port_width':background['port']['width'],
-            'background_port_height':background['port']['height'],
-            'background_land_width':background['land']['width'],
-            'background_land_height':background['land']['height'],
-
-            'screen_port_width':screen_port['width'],
-            'screen_port_height':screen_port['height'],
-
-            'screen_port_x':offset_x(screen_port,'port'),
-            'screen_port_y':offset_y(screen_port,'port'),
-            'screen_land_x':offset_x(screen_land,'land'),
-            'screen_land_y':offset_y(screen_land,'land') + screen_land['height'],
-
-            'buttons_land':''.join(buttons['land']),
-            'buttons_port':''.join(buttons['port']),
-            }
-        ))
+ExportLayer = namedtuple('ExportLayer',['name','offsets', 'width', 'height'], False)
 
 def flatten_layers(drawable, visible=True):
     for layer in drawable.layers:
@@ -228,10 +254,6 @@ def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0)
     
     print 'IMAGE_HEADER width height'
     print "IMAGE", image.width, image.height
-    layout = {'image':None, 'layers':None}
-    layout['image'] = {'name':image.name, 'width':image.width, 'height':image.height}
-    layout['layers'] = {}
-    
     print 'LAYER_HEADER visible x y width height name'
     if not os.path.isdir(save_path):
         os.makedirs(save_path)
@@ -242,12 +264,11 @@ def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0)
         if not visible:
             continue
         
+        # Also export text layers to text files
         if pdb.gimp_item_is_text_layer(layer):
             with open(os.path.join(save_path,layer.name),'w') as f:
                 f.write(pdb.gimp_text_layer_get_text(layer))
         else:
-            layout["layers"].setdefault(layer.name, {'offsets':layer.offsets, 'width':layer.width, 'height':layer.height})
-    
             png_filepath = os.path.join(save_path, layer.name)
     
             pdb.file_png_save2(
@@ -266,13 +287,13 @@ def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0)
                 1   # save color values from transparent pixels
             )
     
-    pdb.gimp_image_delete(image)
-    
     # Write json layout
     layout_json = os.path.join(save_path,'layout.json')
     with open(layout_json, 'w') as f:
-        f.write(json.dumps(layout, indent=2))
+        f.write(json.dumps(image, cls=GimpJSONEncoder, indent=2))
 
+    pdb.gimp_image_delete(image)
+    
     # Write emulator skin layout
     layout_skin = os.path.join(save_path,'layout')
     convert_skin_layout(layout_json, layout_skin)
