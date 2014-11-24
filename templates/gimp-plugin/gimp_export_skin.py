@@ -112,18 +112,19 @@ BUTTON = Template("""
                 y       ${button_y}
             }""")
 
-def get_dict(obj, *fields):
-    return OrderedDict([(k,getattr(obj,k)) for k in fields])
-
 class GimpJSONEncoder(json.JSONEncoder):
     def default(self, obj):
-        if hasattr(obj,'offsets') and hasattr(obj,'layers'): # gimp.GroupLayer
-            return get_dict(obj, 'name','visible','width','height','offsets', 'layers')
-        if hasattr(obj,'layers'): # gimp.Image
-            return get_dict(obj, 'name','width','height','layers')
-        if hasattr(obj,'offsets'): # gimp.Layer
-            return get_dict(obj, 'name','visible','width','height','offsets')
-        return json.JASONEncoder.default(self, obj)
+        hasattrs = lambda obj,*fields: [f for f in fields if hasattr(obj,f)]
+        getattrs = lambda obj,*fields: [(f, getattr(obj,f)) for f in fields]
+
+        item_fields = ['name','width','height']
+        extra_fields = ('offsets','layers')
+        
+        if hasattrs(obj, *item_fields):
+            item_fields.extend(hasattrs(obj, *extra_fields))
+            return OrderedDict(getattrs(obj, *item_fields))
+            
+        return json.JSONEncoder.default(self, obj)
 
 class LayerNameError(Exception):
     pass
