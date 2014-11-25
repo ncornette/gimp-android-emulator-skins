@@ -1,15 +1,5 @@
 #! /usr/bin/env python
-# This lists the layers of a GIMP xcf file.  This also exports the visible layers into a png file.
-#
-# Execute the commands:
-#
-#   curl -O https://bitbucket.org/rgl/make_dmg/downloads/background.xcf
-#   gimp -idf --batch-interpreter=python-fu-eval -b - -b 'pdb.gimp_quit(0)' < gimp_xcf_list_layers.py
-#
-# See http://www.gimp.org/docs/python/
-# See http://gimpbook.com/scripting/
-#
-# -- Rui Lopes (ruilopes.com)
+
 import re
 import sys
 import os
@@ -18,6 +8,8 @@ from pipes import quote
 from string import Template
 from collections import namedtuple
 from collections import OrderedDict
+import mimetypes
+mimetypes.add_type('text/plain','.ini')
 
 DENSITIES = (
     # name, (density, min, max)
@@ -120,7 +112,7 @@ class GimpJSONEncoder(json.JSONEncoder):
         getattrs = lambda obj,*fields: [(f, getattr(obj,f)) for f in fields]
 
         item_fields = ['name','width','height']
-        extra_fields = ('offsets','layers','visible')
+        extra_fields = ('visible','offsets','layers')
         
         if hasattrs(obj, *item_fields):
             item_fields.extend(hasattrs(obj, *extra_fields))
@@ -148,7 +140,15 @@ def getlayers(group, parent=None):
 
 #for p,l in getlayers(image): print p, l
 
-def gimp_export(image, save_path):
+def gimp_autocrop_layer(image, layer):
+    pdb.gimp_image_set_active_layer(image, layer)
+    pdb.plug_in_autocrop_layer(image, layer)
+
+def gimp_export(image, layout, save_path):
+    gimp_export_pngs(image, save_path)
+    gimp_export_json(image, save_path)
+
+def gimp_export_pngs(image, save_path):
     if not os.path.isdir(save_path):
         os.makedirs(save_path)
 
@@ -167,10 +167,12 @@ def gimp_export(image, save_path):
                 pdb.file_png_save_defaults(image, layer, png_filepath, png_filepath)
 
 def gimp_export_json(image, file_path):
+    if os.path.isdir(file_path):
+        file_path = os.path.join(file_path, JSON_LAYOUT_FILE)
     with open(file_path, 'w') as f:
         f.write(json.dumps(image, cls=GimpJSONEncoder, indent=2))
 
-def gimp_import_json(file_path):
+def gimp_import(file_path):
     if os.path.isdir(file_path):
         file_path = os.path.join(file_path, JSON_LAYOUT_FILE)
     import_path, fname = os.path.split(file_path)
@@ -186,8 +188,15 @@ def gimp_import_json(file_path):
             else:
                 image_filepath = os.path.join(import_path,source_layer.name)
                 name, ext = os.path.splitext(image_filepath)
-                if os.path.isfile(image_filepath) and ext == '.png':
-                    layer = pdb.gimp_file_load_layer(image, image_filepath)
+                if os.path.isfile(image_filepath):
+                    mimetype = mimetypes.guess_type(image_filepath)[0]
+                    if mimetype and mimetype.startswith('text'):
+                        with open(image_filepath,'r') as f:
+                            text = f.read()
+                        layer = pdb.gimp_text_layer_new(image, text, 'monospace', 24, 0)
+                        #pdb.gimp_text_layer_resize(layer, source_layer.width, source_layer.height)
+                    else:
+                        layer = pdb.gimp_file_load_layer(image, image_filepath)
             if layer:
                 if hasattr(source_layer,'visible'): pdb.gimp_item_set_visible(layer, source_layer.visible)
                 pdb.gimp_item_set_name(layer,source_layer.name)
@@ -203,11 +212,8 @@ def gimp_import_json(file_path):
 class LayerNameError(Exception):
     pass
 
-def convert_skin_layout(source, destination):
+def skin_export_layout(image, save_path):
 
-    with open(source, 'r') as f:
-        image = json2obj(f.read())
-    
     port_layers = find_layer(image, 'portrait')
     land_layers = find_layer(image, 'landscape')
     screen_port = find_layer(port_layers, 'screen_port.png')
@@ -250,18 +256,10 @@ def convert_skin_layout(source, destination):
     
     skin_layout['buttons_port'] = ''.join(buttons['port'])
     skin_layout['buttons_land'] = ''.join(buttons['land'])
-                
-    with open(destination, 'w') as f:
+    
+    layout_filepath = os.path.join(save_path, 'layout')
+    with open(layout_filepath, 'w') as f:
         f.write(LAYOUT.substitute(skin_layout))
-
-def flatten_layers(drawable, visible=True):
-    for layer in drawable.layers:
-        layer_visible = visible and layer.visible
-        if not hasattr(layer, 'layers'):
-            yield (layer, layer_visible)
-            continue
-        for l in flatten_layers(layer, layer_visible):
-            yield l
 
 def skin_scale(image, target_density):
     hardware_layer = [l for l in image.layers if l.name == 'hardware.ini'][0]
@@ -281,7 +279,7 @@ def skin_scale(image, target_density):
 
 def skin_landscape(image, layer):
     landscape = pdb.gimp_layer_copy(layer, True)
-    pdb.gimp_image_insert_layer(image, landscape, None, 0)
+    pdb.gimp_image_insert_layer(image, landscape, None, len(image.layers))
     pdb.gimp_item_transform_rotate_simple(landscape, 2, False, image.width/2, image.height/2)
     landscape.name = layer.name.replace('portrait','landscape')
 
@@ -298,8 +296,7 @@ def skin_resize(image, ratio_string='4/3'):
     background_land = pdb.gimp_image_get_layer_by_name(image, 'background_land.png')
     pdb.gimp_layer_resize(background_land, background_port.width, background_port.height, round(background_port.width/2) - round(background_land.width/2), round(background_port.height/2) - round(background_land.height/2))
 
-def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0):
-
+def skin_update_copy(image_source, ratio_index, scale_index):
     image = pdb.gimp_image_duplicate(image_source)
 
     for l in image.layers:
@@ -307,57 +304,20 @@ def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0)
             # Hide unrelevant layers
             pdb.gimp_item_set_visible(l, False)
 
-    layer_group_portrait = [l for l in image.layers if l.name == 'portrait'][0]
+    layer_group_portrait = find_layer(image, 'portrait')
     if scale_index: skin_scale(image, DENSITIES[scale_index][0])
     if not pdb.gimp_image_get_layer_by_name(image, 'landscape'): skin_landscape(image, layer_group_portrait)
     if ratio_index: skin_resize(image, SKIN_RATIOS[ratio_index])
+    return image
 
-    layers = list(flatten_layers(image))
-    
-    print 'IMAGE_HEADER width height'
-    print "IMAGE", image.width, image.height
-    print 'LAYER_HEADER visible x y width height name'
-    if not os.path.isdir(save_path):
-        os.makedirs(save_path)
-
-    for layer, visible in layers:
-        print "LAYER", visible and "1" or "0", layer.offsets[0], layer.offsets[1], layer.width, layer.height, layer.name
-    
-        if not visible:
-            continue
-        
-        # Also export text layers to text files
-        if pdb.gimp_item_is_text_layer(layer):
-            with open(os.path.join(save_path,layer.name),'w') as f:
-                f.write(pdb.gimp_text_layer_get_text(layer))
-        else:
-            png_filepath = os.path.join(save_path, layer.name)
-    
-            pdb.file_png_save2(
-                image,
-                layer,
-                png_filepath,
-                png_filepath,
-                0,  # interlacing (Adam7)
-                9,  # compression level (0-9)
-                0,  # save background color
-                0,  # save gamma
-                0,  # save layer offset
-                1,  # save resolution
-                0,  # save creation time
-                0,  # save comment 
-                1   # save color values from transparent pixels
-            )
-    
-    # Write json layout
-    layout_json = os.path.join(save_path, JSON_LAYOUT_FILE)
-    gimp_export_json(image, layout_json)
-
-    pdb.gimp_image_delete(image)
-    
-    # Write emulator skin layout
-    layout_skin = os.path.join(save_path,'layout')
-    convert_skin_layout(layout_json, layout_skin)
+def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0):
+    image = skin_update_copy(image_source, ratio_index, scale_index)
+    try:
+        gimp_export_pngs(image, save_path)
+        gimp_export_json(image, save_path)
+        skin_export_layout(image, save_path)
+    finally:
+        pdb.gimp_image_delete(image)
 
 if __name__=='__main__':
 
@@ -378,9 +338,20 @@ if __name__=='__main__':
         import gimpfu
         pdb = gimpfu.pdb
         DEFAULT_OUTPUT_DIR = os.getcwd()
-        gimpfu.register("python_fu_extract", 
-                        "Extract Layers", 
-                        "Save coordinates to json file", 
+        gimpfu.register("python_fu_layout_export", 
+                        "Export Layout", 
+                        "Export layers and json", 
+                        "Nic", "Nicolas CORNETTE", "2014", 
+                        "<Image>/File/Export/Export Layout...", 
+                        "*", [
+                            (gimpfu.PF_DIRNAME, "load-path", "Path for import", DEFAULT_OUTPUT_DIR),
+                              ], 
+                        [], 
+                        gimp_export) #, menu, domain, on_query, on_run)
+
+        gimpfu.register("python_fu_extract_skin", 
+                        "Export Android Skin", 
+                        "Export Android Emulator Skin", 
                         "Nic", "Nicolas CORNETTE", "2014", 
                         "<Image>/File/Export/Export Emulator Skin...", 
                         "*", [
@@ -390,15 +361,17 @@ if __name__=='__main__':
                               ], 
                         [], 
                         extract_layers) #, menu, domain, on_query, on_run)
-        gimpfu.register("python_fu_import", 
+
+        gimpfu.register("python_fu_layout_import", 
                         "Import Layers", 
                         "Import layers from json and images", 
                         "Nic", "Nicolas CORNETTE", "2014", 
-                        "Import Emulator Skin...", 
+                        "Import Layout...", 
                         "", [
-                            (gimpfu.PF_DIRNAME, "import-path", "Path for export", DEFAULT_OUTPUT_DIR),
+                            (gimpfu.PF_DIRNAME, "import-path", "Path for import", DEFAULT_OUTPUT_DIR),
                               ], 
                         [], 
-                        gimp_import_json, menu='<Image>/File/Export/') #, domain, on_query, on_run)
+                        gimp_import, menu='<Image>/File/Export/') #, domain, on_query, on_run)
+
         gimpfu.main()
 
