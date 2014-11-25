@@ -118,17 +118,13 @@ class GimpJSONEncoder(json.JSONEncoder):
         getattrs = lambda obj,*fields: [(f, getattr(obj,f)) for f in fields]
 
         item_fields = ['name','width','height']
-        extra_fields = ('offsets','layers')
+        extra_fields = ('offsets','layers','visible')
         
         if hasattrs(obj, *item_fields):
             item_fields.extend(hasattrs(obj, *extra_fields))
             return OrderedDict(getattrs(obj, *item_fields))
             
         return json.JSONEncoder.default(self, obj)
-
-class LayerNameError(Exception):
-    pass
-
 
 def find_layers(group, name):
     return [l for l in group.layers if re.match(name, l.name)]
@@ -139,6 +135,54 @@ def find_layer(group, name):
 
 _json_object_hook = lambda d: namedtuple('X', d.keys())(*d.values())
 json2obj = lambda data: json.loads(data, object_hook=_json_object_hook)    
+
+def getlayers(group, parent=None):
+    for layer in group.layers:
+        yield group, layer
+        if hasattr(layer,'layers'):
+            for p,l in getlayers(layer, group):
+                yield p,l
+
+
+#for p,l in getlayers(image): print p, l
+
+
+def gimp_export_json(image, file_path):
+   with open(file_path, 'w') as f:
+        f.write(json.dumps(image, cls=GimpJSONEncoder, indent=2))
+
+def gimp_import_json(file_path):
+    if os.path.isdir(file_path):
+        file_path = os.path.join(file_path,'layout.json')
+    import_path, fname = os.path.split(file_path)
+    with open(file_path, 'r') as f:
+        source_image = json2obj(f.read())
+    image = pdb.gimp_image_new(source_image.width, source_image.height, 0)
+    try:
+        for source_parent, source_layer in getlayers(source_image):
+            parent = find_layer(image, source_parent.name)
+            layer = None
+            if hasattr(source_layer,'layers'):
+                layer = pdb.gimp_layer_group_new(image)
+            else:
+                image_filepath = os.path.join(import_path,source_layer.name)
+                name, ext = os.path.splitext(image_filepath)
+                if os.path.isfile(image_filepath) and ext == '.png':
+                    layer = pdb.gimp_file_load_layer(image, image_filepath)
+            if layer:
+                if hasattr(source_layer,'visible'): pdb.gimp_item_set_visible(layer, source_layer.visible)
+                pdb.gimp_item_set_name(layer,source_layer.name)
+                pdb.gimp_layer_set_offsets(layer, source_layer.offsets[0], source_layer.offsets[1])
+                pdb.gimp_image_insert_layer(image, layer, parent, parent and len(parent.layers) or len(image.layers))
+    finally:
+        display = pdb.gimp_display_new(image)
+
+
+#gimp_import_json('/home/nic/workspace/android-emulator-skins/templates/test/layout.json')
+
+
+class LayerNameError(Exception):
+    pass
 
 def convert_skin_layout(source, destination):
 
@@ -190,8 +234,6 @@ def convert_skin_layout(source, destination):
                 
     with open(destination, 'w') as f:
         f.write(LAYOUT.substitute(skin_layout))
-
-ExportLayer = namedtuple('ExportLayer',['name','offsets', 'width', 'height'], False)
 
 def flatten_layers(drawable, visible=True):
     for layer in drawable.layers:
@@ -290,8 +332,7 @@ def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0)
     
     # Write json layout
     layout_json = os.path.join(save_path,'layout.json')
-    with open(layout_json, 'w') as f:
-        f.write(json.dumps(image, cls=GimpJSONEncoder, indent=2))
+    gimp_export_json(image, layout_json)
 
     pdb.gimp_image_delete(image)
     
@@ -330,5 +371,15 @@ if __name__=='__main__':
                               ], 
                         [], 
                         extract_layers) #, menu, domain, on_query, on_run)
+        gimpfu.register("python_fu_import", 
+                        "Import Layers", 
+                        "Import layers from json and images", 
+                        "Nic", "Nicolas CORNETTE", "2014", 
+                        "Import Emulator Skin...", 
+                        "", [
+                            (gimpfu.PF_DIRNAME, "import-path", "Path for export", DEFAULT_OUTPUT_DIR),
+                              ], 
+                        [], 
+                        gimp_import_json, menu='<Image>/File/Export/') #, domain, on_query, on_run)
         gimpfu.main()
 
