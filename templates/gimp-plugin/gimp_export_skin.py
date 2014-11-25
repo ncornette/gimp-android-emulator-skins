@@ -112,6 +112,8 @@ BUTTON = Template("""
                 y       ${button_y}
             }""")
 
+JSON_LAYOUT_FILE = 'layout.json'
+
 class GimpJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         hasattrs = lambda obj,*fields: [f for f in fields if hasattr(obj,f)]
@@ -146,14 +148,31 @@ def getlayers(group, parent=None):
 
 #for p,l in getlayers(image): print p, l
 
+def gimp_export(image, save_path):
+    if not os.path.isdir(save_path):
+        os.makedirs(save_path)
+
+    for parent, layer in getlayers(image):
+        if hasattr(layer, 'layers'):
+            #Ignore GroupLayers
+            pass
+        else:
+            # Also export text layers to text files
+            if pdb.gimp_item_is_text_layer(layer):
+                with open(os.path.join(save_path,layer.name),'w') as f:
+                    f.write(pdb.gimp_text_layer_get_text(layer))
+            else:
+                png_filepath = os.path.join(save_path, layer.name)
+                # see pdb.file_png_save & pdb.file_png_save2 for png export options
+                pdb.file_png_save_defaults(image, layer, png_filepath, png_filepath)
 
 def gimp_export_json(image, file_path):
-   with open(file_path, 'w') as f:
+    with open(file_path, 'w') as f:
         f.write(json.dumps(image, cls=GimpJSONEncoder, indent=2))
 
 def gimp_import_json(file_path):
     if os.path.isdir(file_path):
-        file_path = os.path.join(file_path,'layout.json')
+        file_path = os.path.join(file_path, JSON_LAYOUT_FILE)
     import_path, fname = os.path.split(file_path)
     with open(file_path, 'r') as f:
         source_image = json2obj(f.read())
@@ -178,7 +197,7 @@ def gimp_import_json(file_path):
         display = pdb.gimp_display_new(image)
 
 
-#gimp_import_json('/home/nic/workspace/android-emulator-skins/templates/test/layout.json')
+#gimp_import_json('/home/nic/workspace/android-emulator-skins/templates/test/' + JSON_LAYOUT_FILE)
 
 
 class LayerNameError(Exception):
@@ -331,7 +350,7 @@ def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0)
             )
     
     # Write json layout
-    layout_json = os.path.join(save_path,'layout.json')
+    layout_json = os.path.join(save_path, JSON_LAYOUT_FILE)
     gimp_export_json(image, layout_json)
 
     pdb.gimp_image_delete(image)
