@@ -112,7 +112,7 @@ class GimpJSONEncoder(json.JSONEncoder):
         getattrs = lambda obj,*fields: [(f, getattr(obj,f)) for f in fields]
 
         item_fields = ['name','width','height']
-        extra_fields = ('visible','offsets','layers')
+        extra_fields = ('visible','type','opacity','mode','has_alpha','is_indexed','offsets','layers')
         
         if hasattrs(obj, *item_fields):
             item_fields.extend(hasattrs(obj, *extra_fields))
@@ -184,25 +184,37 @@ def gimp_import(file_path):
             parent = find_layer(image, source_parent.name)
             layer = None
             if hasattr(source_layer,'layers'):
+                # Create GroupLayer
                 layer = pdb.gimp_layer_group_new(image)
             else:
+                # Read file from disk
                 image_filepath = os.path.join(import_path,source_layer.name)
                 name, ext = os.path.splitext(image_filepath)
                 if os.path.isfile(image_filepath):
                     mimetype = mimetypes.guess_type(image_filepath)[0]
                     if mimetype and mimetype.startswith('text'):
+                        # Import text Layer
                         with open(image_filepath,'r') as f:
                             text = f.read()
-                        layer = pdb.gimp_text_layer_new(image, text, 'monospace', 24, 0)
-                        #pdb.gimp_text_layer_resize(layer, source_layer.width, source_layer.height)
+                        layer = pdb.gimp_text_layer_new(image, text, 'Monospace', 24, 0)
                     else:
+                        # Import image Layer
                         layer = pdb.gimp_file_load_layer(image, image_filepath)
             if layer:
-                if hasattr(source_layer,'visible'): pdb.gimp_item_set_visible(layer, source_layer.visible)
-                pdb.gimp_item_set_name(layer,source_layer.name)
-                pdb.gimp_layer_set_offsets(layer, source_layer.offsets[0], source_layer.offsets[1])
+                # Set layer attributes
+                pdb.gimp_item_set_name(layer, source_layer.name)
+                pdb.gimp_item_set_visible(layer, source_layer.visible)
+                if hasattr(source_layer,'offsets'): pdb.gimp_layer_set_offsets(layer, *source_layer.offsets)
+                if hasattr(source_layer,'opacity'): pdb.gimp_layer_set_opacity(layer, source_layer.opacity)
+                if hasattr(source_layer,'mode'): pdb.gimp_layer_set_mode(layer, source_layer.mode)
+                
+                # Insert Layer into the Image
                 pdb.gimp_image_insert_layer(image, layer, parent, parent and len(parent.layers) or len(image.layers))
+                
+                # Set Text Layer size
+                if pdb.gimp_item_is_text_layer(layer): pdb.gimp_text_layer_resize(layer, source_layer.width, source_layer.height)
     finally:
+        # Make sure to display the new  image
         display = pdb.gimp_display_new(image)
 
 
@@ -262,10 +274,8 @@ def skin_export_layout(image, save_path):
         f.write(LAYOUT.substitute(skin_layout))
 
 def skin_scale(image, target_density):
-    hardware_layer = [l for l in image.layers if l.name == 'hardware.ini'][0]
-    hardware_layer_copy = pdb.gimp_layer_copy(hardware_layer, True)
+    hardware_layer = find_layer(image,'hardware.ini')
     hardware_config = pdb.gimp_text_layer_get_text(hardware_layer)
-    pdb.gimp_item_set_visible(hardware_layer, False)
     hardware_layer.name = 'old_hardware.ini'
     skin_density = int(re.findall('hw.lcd.density\W*=\W*(\d*).*', hardware_config)[0])
     ref_skin_density = [d[1][0] for d in DENSITIES_MAP.iteritems() if skin_density in range(d[1][1],d[1][2])][0]
@@ -273,18 +283,22 @@ def skin_scale(image, target_density):
     scale = float(target_density_value) / ref_skin_density
     pdb.gimp_image_scale(image, round(scale*image.width), round(scale*image.height))
     hardware_config_scaled = re.sub('(.*hw.lcd.density\W*=\W*)(\d*)(.*)', '\\g<1>%d\\g<3>' % int(scale * skin_density), hardware_config)
-    hardware_layer_copy.name = "hardware.ini"
-    pdb.gimp_image_insert_layer(image, hardware_layer_copy, None, 0)
+    hardware_layer_copy = pdb.gimp_text_layer_new(image, hardware_config, 'Monospace', 24, 0)
+    pdb.gimp_image_insert_layer(image, hardware_layer_copy, None, pdb.gimp_image_get_item_position(image,hardware_layer))
+    pdb.gimp_item_set_name(hardware_layer_copy, 'hardware.ini')
+    pdb.gimp_layer_set_offsets(hardware_layer_copy, *hardware_layer.offsets)
+    pdb.gimp_text_layer_resize(hardware_layer_copy, hardware_layer.width, hardware_layer.height)
     pdb.gimp_text_layer_set_text(hardware_layer_copy, hardware_config_scaled)
+    pdb.gimp_image_remove_layer(image,hardware_layer)
 
 def skin_landscape(image, layer):
     landscape = pdb.gimp_layer_copy(layer, True)
-    pdb.gimp_image_insert_layer(image, landscape, None, len(image.layers))
+    pdb.gimp_image_insert_layer(image, landscape, None, pdb.gimp_image_get_item_position(image,layer)+1)
     pdb.gimp_item_transform_rotate_simple(landscape, 2, False, image.width/2, image.height/2)
     landscape.name = layer.name.replace('portrait','landscape')
 
     #Retrieve landscape layer as a LayerGroup
-    landscape = [l for l in image.layers if l.name == landscape.name][0]
+    landscape = find_layer(image,landscape.name)
     for l in landscape.layers:
         l.name = re.sub('(.*)(_port)(\.\w*) ?#?.*', '\\1_land\\3', l.name)
 
