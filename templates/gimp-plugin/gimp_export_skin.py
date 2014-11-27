@@ -112,7 +112,7 @@ class GimpJSONEncoder(json.JSONEncoder):
         getattrs = lambda obj,*fields: [(f, getattr(obj,f)) for f in fields]
 
         item_fields = ['name','width','height']
-        extra_fields = ('visible','opacity','mode','offsets','layers')
+        extra_fields = ('visible','opacity','mode','offsets','mask','layers')
         
         if hasattrs(obj, *item_fields):
             item_fields.extend(hasattrs(obj, *extra_fields))
@@ -121,7 +121,7 @@ class GimpJSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def find_layers(group, name):
-    return [l for l in group.layers if re.match(name, l.name)]
+    return [l for p,l in getlayers(group) if re.match(name, l.name)]
 
 def find_layer(group, name):
     layers = find_layers(group, name)
@@ -136,6 +136,8 @@ def getlayers(group):
     """
     for layer in group.layers:
         yield group, layer
+        if hasattr(layer, 'mask'):
+                if layer.mask: yield layer,layer.mask
         if hasattr(layer,'layers'):
             for g,l in getlayers(layer):
                 yield g,l
@@ -155,6 +157,7 @@ def gimp_export_pngs(image, save_path):
         os.makedirs(save_path)
 
     for parent, layer in getlayers(image):
+        print 'PNG EXPORT: %s/%s' % (parent.name,layer.name)
         if hasattr(layer, 'layers'):
             #Ignore GroupLayers
             pass
@@ -183,7 +186,8 @@ def gimp_import(file_path):
     image = pdb.gimp_image_new(source_image.width, source_image.height, 0)
     try:
         for source_parent, source_layer in getlayers(source_image):
-            parent = find_layer(image, source_parent.name)
+            print 'PNG IMPORT: %s/%s' % (source_parent.name,source_layer.name)
+            parent = find_layer(image, '^%s$' % source_parent.name)
             layer = None
             if hasattr(source_layer,'layers'):
                 # Create GroupLayer
@@ -210,11 +214,25 @@ def gimp_import(file_path):
                 if hasattr(source_layer,'opacity'): pdb.gimp_layer_set_opacity(layer, source_layer.opacity)
                 if hasattr(source_layer,'mode'): pdb.gimp_layer_set_mode(layer, source_layer.mode)
                 
-                # Insert Layer into the Image
-                pdb.gimp_image_insert_layer(image, layer, parent, parent and len(parent.layers) or len(image.layers))
-                
+                if hasattr(source_parent,'mask') and source_layer == source_parent.mask:
+                    # Apply Layer mask
+                    pdb.gimp_image_insert_layer(image, layer, None, 0)
+                    pdb.gimp_layer_add_alpha(layer)
+                    pdb.plug_in_colortoalpha(image, layer, gimpfu.gimpcolor.rgb_names()['black'])
+                    pdb.gimp_image_select_item(image,gimpfu.CHANNEL_OP_REPLACE,layer)
+                    mask = pdb.gimp_layer_create_mask(parent, gimpfu.ADD_SELECTION_MASK)
+                    #import IPython;IPython.embed()
+                    pdb.gimp_layer_add_mask(parent, mask)
+                    pdb.gimp_selection_none(image)
+                    pdb.gimp_image_remove_layer(image,layer)
+                    layer = None
+                else:
+                    # Insert Layer into the Image
+                    pdb.gimp_image_insert_layer(image, layer, parent, parent and len(parent.layers) or len(image.layers))
+
                 # Set Text Layer size
-                if pdb.gimp_item_is_text_layer(layer): pdb.gimp_text_layer_resize(layer, source_layer.width, source_layer.height)
+                if layer and pdb.gimp_item_is_text_layer(layer): 
+                    pdb.gimp_text_layer_resize(layer, source_layer.width, source_layer.height)
     finally:
         # Make sure to display the new  image
         display = pdb.gimp_display_new(image)
