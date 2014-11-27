@@ -224,7 +224,6 @@ def gimp_import(file_path):
                     pdb.plug_in_colortoalpha(image, layer, gimpfu.gimpcolor.rgb_names()['black'])
                     pdb.gimp_image_select_item(image,gimpfu.CHANNEL_OP_REPLACE,layer)
                     mask = pdb.gimp_layer_create_mask(parent, gimpfu.ADD_SELECTION_MASK)
-                    #import IPython;IPython.embed()
                     pdb.gimp_layer_add_mask(parent, mask)
                     pdb.gimp_selection_none(image)
                     pdb.gimp_image_remove_layer(image,layer)
