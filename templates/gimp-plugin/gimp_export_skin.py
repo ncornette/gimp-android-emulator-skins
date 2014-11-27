@@ -184,6 +184,8 @@ def gimp_import(file_path):
     with open(file_path, 'r') as f:
         source_image = json2obj(f.read())
     image = pdb.gimp_image_new(source_image.width, source_image.height, 0)
+    pdb.gimp_image_undo_disable(image)
+    pdb.gimp_image_set_filename(image, source_image.name)
     try:
         for source_parent, source_layer in getlayers(source_image):
             print 'PNG IMPORT: %s/%s' % (source_parent.name,source_layer.name)
@@ -235,6 +237,7 @@ def gimp_import(file_path):
                     pdb.gimp_text_layer_resize(layer, source_layer.width, source_layer.height)
     finally:
         # Make sure to display the new  image
+        pdb.gimp_image_undo_enable(image)
         display = pdb.gimp_display_new(image)
 
 
@@ -332,7 +335,7 @@ def skin_resize(image, ratio_string='4/3'):
 
 def skin_update_copy(image_source, ratio_index, scale_index):
     image = pdb.gimp_image_duplicate(image_source)
-
+    pdb.gimp_image_undo_disable(image)
     for l in image.layers:
         if not l.name in ('hardware.ini','overlay.png', 'portrait'):
             # Hide unrelevant layers
@@ -342,6 +345,7 @@ def skin_update_copy(image_source, ratio_index, scale_index):
     if scale_index: skin_scale(image, DENSITIES[scale_index][0])
     if not pdb.gimp_image_get_layer_by_name(image, 'landscape'): skin_landscape(image, layer_group_portrait)
     if ratio_index: skin_resize(image, SKIN_RATIOS[ratio_index])
+    pdb.gimp_image_undo_enable(image)
     return image
 
 def extract_layers(image_source, layer, save_path, ratio_index=0, scale_index=0):
