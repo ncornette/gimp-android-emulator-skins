@@ -112,7 +112,7 @@ class GimpJSONEncoder(json.JSONEncoder):
         getattrs = lambda obj,*fields: [(f, getattr(obj,f)) for f in fields]
 
         item_fields = ['name','width','height']
-        extra_fields = ('visible','opacity','mode','offsets','mask','layers')
+        extra_fields = ('visible','linked','opacity','mode','offsets','mask','layers')
         
         if hasattrs(obj, *item_fields):
             item_fields.extend(hasattrs(obj, *extra_fields))
@@ -212,6 +212,7 @@ def gimp_import(file_path):
                 # Set layer attributes
                 pdb.gimp_item_set_name(layer, source_layer.name)
                 pdb.gimp_item_set_visible(layer, source_layer.visible)
+                if hasattr(source_layer,'linked'): pdb.gimp_item_set_linked(layer, source_layer.linked)
                 if hasattr(source_layer,'offsets'): pdb.gimp_layer_set_offsets(layer, *source_layer.offsets)
                 if hasattr(source_layer,'opacity'): pdb.gimp_layer_set_opacity(layer, source_layer.opacity)
                 if hasattr(source_layer,'mode'): pdb.gimp_layer_set_mode(layer, source_layer.mode)
