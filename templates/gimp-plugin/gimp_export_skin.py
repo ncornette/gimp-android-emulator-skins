@@ -112,7 +112,7 @@ class GimpJSONEncoder(json.JSONEncoder):
         getattrs = lambda obj,*fields: [(f, getattr(obj,f)) for f in fields]
 
         item_fields = ['name','width','height']
-        extra_fields = ('visible','type','opacity','mode','has_alpha','is_indexed','offsets','layers')
+        extra_fields = ('visible','opacity','mode','offsets','layers')
         
         if hasattrs(obj, *item_fields):
             item_fields.extend(hasattrs(obj, *extra_fields))
@@ -130,13 +130,15 @@ def find_layer(group, name):
 _json_object_hook = lambda d: namedtuple('X', d.keys())(*d.values())
 json2obj = lambda data: json.loads(data, object_hook=_json_object_hook)    
 
-def getlayers(group, parent=None):
+def getlayers(group):
+    """ Returns a generator of layers and sub-layers
+    result is a tuple (group,layer)
+    """
     for layer in group.layers:
         yield group, layer
         if hasattr(layer,'layers'):
-            for p,l in getlayers(layer, group):
-                yield p,l
-
+            for g,l in getlayers(layer):
+                yield g,l
 
 #for p,l in getlayers(image): print p, l
 
