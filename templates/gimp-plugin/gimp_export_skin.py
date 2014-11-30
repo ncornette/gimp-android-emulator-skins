@@ -151,7 +151,7 @@ def skin_export_layout(image, save_path):
 
     fullname_parser = re.compile('^(.*)_(\w*)\.?.*$')
     
-    button_layers = find_layers(port_layers, '[^(background|screen)]') + find_layers(land_layers, '[^(background|screen)]')
+    button_layers = find_layers(port_layers, '(?!(background|screen))') + find_layers(land_layers, '(?!(background|screen))')
 
     buttons = dict(land = [],port = [])
 
