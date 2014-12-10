@@ -222,16 +222,23 @@ def skin_resize(image, ratio_string='4/3'):
 def skin_update_copy(image_source, ratio_index, scale_index):
     image = pdb.gimp_image_duplicate(image_source)
     pdb.gimp_image_undo_disable(image)
+    
+    # Scale to screen density
+    if scale_index: skin_scale(image, DENSITIES[scale_index][0])
+
+    # Rotate
     direction = ['portrait','landscape']
     layer_orientation = [layer.name for layer in image.layers if layer.name in direction][0]
+    # inverse direction
     direction.insert(0, direction.pop()) if layer_orientation == direction[1] else None
-
     layer_group = find_layer(image, direction[0])
-    if scale_index: skin_scale(image, DENSITIES[scale_index][0])
     target_group = pdb.gimp_image_get_layer_by_name(image, direction[1])
     if not target_group or not target_group.visible: skin_rotate_group(image, layer_group, direction)
+
+    # Update skin aspect ratio
     if ratio_index: skin_resize(image, SKIN_RATIOS[ratio_index])
     pdb.gimp_image_undo_enable(image)
+
     return image
 
 def skin_export(image_source, layer, save_path, ratio_index=0, scale_index=0):
@@ -244,7 +251,7 @@ def skin_export(image_source, layer, save_path, ratio_index=0, scale_index=0):
         pdb.gimp_image_delete(image)
 
 if __name__=='__main__':
-
+    
     try:
         pdb
         interactive = False

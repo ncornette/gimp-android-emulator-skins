@@ -75,13 +75,16 @@ def gimp_export_pngs(image, save_path):
                 pdb.file_png_save2(image, layer, png_filepath, png_filepath,
                     0, # 0 'interlace PDB_INT32: Use Adam7 interlacing?'
                     9, # 9 'compression PDB_INT32: Deflate Compression factor (0--9)'
-                    1, # 1 'bkgd PDB_INT32: Write bKGD chunk?'
-                    0, # 0 'gama PDB_INT32: Write gAMA chunk?'
-                    0, # 0 'offs PDB_INT32: Write oFFs chunk?'
-                    1, # 1 'phys PDB_INT32: Write pHYs chunk?'
-                    0, # 1 'time PDB_INT32: Write tIME chunk?'
-                    1, # 1 'comment PDB_INT32: Write comment?'
-                    1, # 1 'svtrans PDB_INT32: Preserve color of transparent pixels?'
+                    1, # 1 'bkgd PDB_INT32: Write bKGD chunk?' Save background color
+                    0, # 0 'gama PDB_INT32: Write gAMA chunk?' Save Gamma
+                    0, # 0 'offs PDB_INT32: Write oFFs chunk?' Sale layer offset
+                    1, # 1 'phys PDB_INT32: Write pHYs chunk?' Save resolution
+
+                    # 0 to not alter png file content 
+                    0, # 1 'time PDB_INT32: Write tIME chunk?' Save creation time
+
+                    1, # 1 'comment PDB_INT32: Write comment?' Save comment
+                    1, # 1 'svtrans PDB_INT32: Preserve color of transparent pixels?' 
                 )
 
 def gimp_export_json(image, file_path):
