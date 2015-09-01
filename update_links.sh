@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SDK_DIR=`echo $PATH | grep --color=never -o "[^:]*android[^:]*sdk[^:]*/tools[^:]*"`
+SDK_DIR=`echo $PATH | grep -i --color=never -o "[^:]*android[^:]*sdk[^:]*/tools[^:]*"`
 OIFS=$IFS
 IFS=$'\n'
 for d in $SDK_DIR; do
