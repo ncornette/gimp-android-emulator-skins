@@ -16,20 +16,20 @@ parts {
 
         buttons {
             
+            power {
+                image   power_port.png
+                x       1732
+                y       1113
+            }
             volume-up {
                 image   volume-up_port.png
-                x       1765
-                y       1337
+                x       1732
+                y       1367
             }
             volume-down {
                 image   volume-down_port.png
-                x       1765
-                y       1513
-            }
-            power {
-                image   power_port.png
-                x       1765
-                y       1083
+                x       1732
+                y       1550
             }
         }
     }
@@ -43,18 +43,18 @@ parts {
             
             power {
                 image   power_land.png
-                x       1084
-                y       154
+                x       1113
+                y       47
             }
             volume-up {
                 image   volume-up_land.png
-                x       1338
-                y       154
+                x       1367
+                y       47
             }
             volume-down {
                 image   volume-down_land.png
-                x       1514
-                y       154
+                x       1550
+                y       54
             }
         }
     }
@@ -62,7 +62,7 @@ parts {
 
 layouts {
     portrait {
-        width     2004
+        width     1865
         height    3309 
         color     0x555555
         
@@ -74,14 +74,14 @@ layouts {
 
         part2 {
             name    device
-            x       285
+            x       219
             y       356
         }
     }
     
     landscape {
         width     3309
-        height    2004
+        height    1865
         color     0x555555
         
         part1 {
@@ -93,7 +93,7 @@ layouts {
         part2 {
             name   device
             x      356
-            y      1720
+            y      1646
             rotation 3
         }
     }

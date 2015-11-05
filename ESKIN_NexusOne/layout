@@ -10,30 +10,31 @@ parts {
     }
     
     portrait {
+
         background {
             image   background_port.png
         }
 
         buttons {
             
-            soft-left {
-                image   soft-left_port.png
-                x       229
-                y       949
-            }
             search {
                 image   search_port.png
                 x       472
                 y       949
             }
-            back {
-                image   back_port.png
-                x       106
-                y       949
-            }
             home {
                 image   home_port.png
                 x       350
+                y       949
+            }
+            soft-left {
+                image   soft-left_port.png
+                x       229
+                y       949
+            }
+            back {
+                image   back_port.png
+                x       106
                 y       949
             }
         }
@@ -46,25 +47,25 @@ parts {
 
         buttons {
             
+            search {
+                image   search_land.png
+                x       949
+                y       108
+            }
             home {
                 image   home_land.png
                 x       949
                 y       230
-            }
-            back {
-                image   back_land.png
-                x       949
-                y       474
             }
             soft-left {
                 image   soft-left_land.png
                 x       949
                 y       351
             }
-            search {
-                image   search_land.png
+            back {
+                image   back_land.png
                 x       949
-                y       108
+                y       474
             }
         }
     }
@@ -76,6 +77,11 @@ layouts {
         height    1226 
         color     0x555555
         
+	onion {
+	    image   overlay.png
+            rotation 0
+	}
+
         part1 {
             name    portrait
             x       0
@@ -94,6 +100,11 @@ layouts {
         height    640
         color     0x555555
         
+	onion {
+	    image   overlay.png
+            rotation 3
+	}
+
         part1 {
             name    landscape
             x       0

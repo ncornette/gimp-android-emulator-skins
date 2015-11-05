@@ -1,97 +1,321 @@
 {
-  "layers": {
-    "power_land.png": {
-      "width": 236, 
-      "height": 85, 
-      "offsets": [
-        1634, 
-        806
-      ]
-    }, 
-    "background_land.png": {
-      "width": 3309, 
-      "height": 2004, 
-      "offsets": [
-        550, 
-        652
-      ]
-    }, 
-    "volume-up_port.png": {
-      "width": 85, 
-      "height": 252, 
-      "offsets": [
-        2968, 
-        1337
-      ]
-    }, 
-    "volume-down_port.png": {
-      "width": 85, 
-      "height": 252, 
-      "offsets": [
-        2968, 
-        1513
-      ]
-    }, 
-    "overlay.png": {
+  "name": "Untitled", 
+  "width": 1865, 
+  "height": 3309, 
+  "layers": [
+    {
+      "name": "overlay.png", 
       "width": 1440, 
       "height": 2560, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
-        1488, 
+        219, 
         356
-      ]
+      ], 
+      "mask": null
     }, 
-    "volume-up_land.png": {
-      "width": 252, 
-      "height": 85, 
+    {
+      "name": "hardware.ini", 
+      "width": 1390, 
+      "height": 2512, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
-        1888, 
-        806
-      ]
+        243, 
+        381
+      ], 
+      "mask": null
     }, 
-    "background_port.png": {
-      "width": 2004, 
+    {
+      "name": "portrait", 
+      "width": 1865, 
       "height": 3309, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
-        1203, 
+        0, 
         0
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "power_port.png", 
+          "width": 86, 
+          "height": 176, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            1732, 
+            1113
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-up_port.png", 
+          "width": 86, 
+          "height": 183, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            1732, 
+            1367
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-down_port.png", 
+          "width": 79, 
+          "height": 184, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            1732, 
+            1550
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen_port.png", 
+          "width": 1440, 
+          "height": 2560, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            219, 
+            356
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "background_port.png", 
+          "width": 1865, 
+          "height": 3309, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            0, 
+            0
+          ], 
+          "mask": null
+        }
       ]
     }, 
-    "screen_land.png": {
-      "width": 2560, 
-      "height": 1440, 
+    {
+      "name": "landscape", 
+      "width": 3309, 
+      "height": 1865, 
+      "visible": false, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
-        906, 
-        932
+        -722, 
+        721
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "power_land.png", 
+          "width": 176, 
+          "height": 86, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            391, 
+            768
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-up_land.png", 
+          "width": 183, 
+          "height": 86, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            645, 
+            768
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-down_land.png", 
+          "width": 184, 
+          "height": 79, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            828, 
+            775
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen_land.png", 
+          "width": 2560, 
+          "height": 1440, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -366, 
+            927
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "background_land.png", 
+          "width": 3309, 
+          "height": 1865, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -722, 
+            721
+          ], 
+          "mask": null
+        }
       ]
     }, 
-    "volume-down_land.png": {
-      "width": 252, 
-      "height": 85, 
+    {
+      "name": "Phone", 
+      "width": 1865, 
+      "height": 3309, 
+      "visible": false, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
-        2064, 
-        806
-      ]
-    }, 
-    "power_port.png": {
-      "width": 85, 
-      "height": 236, 
-      "offsets": [
-        2968, 
-        1083
-      ]
-    }, 
-    "screen_port.png": {
-      "width": 1440, 
-      "height": 2560, 
-      "offsets": [
-        1488, 
-        356
+        0, 
+        0
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "buttons.png", 
+          "width": 11, 
+          "height": 606, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            1738, 
+            1121
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "credit", 
+          "width": 1072, 
+          "height": 1202, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            414, 
+            1292
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "overlay screen", 
+          "width": 1440, 
+          "height": 2560, 
+          "visible": false, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            219, 
+            356
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "overlay phone", 
+          "width": 778, 
+          "height": 2978, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            147, 
+            85
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen", 
+          "width": 1440, 
+          "height": 2560, 
+          "visible": false, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            219, 
+            356
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "phone.png", 
+          "width": 1865, 
+          "height": 3309, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            0, 
+            0
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "shadow.png", 
+          "width": 1499, 
+          "height": 195, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 60.3921568627451, 
+          "mode": 0, 
+          "offsets": [
+            216, 
+            3066
+          ], 
+          "mask": null
+        }
       ]
     }
-  }, 
-  "image": {
-    "width": 4412, 
-    "name": "Nexus6.xcf", 
-    "height": 3309
-  }
+  ]
 }

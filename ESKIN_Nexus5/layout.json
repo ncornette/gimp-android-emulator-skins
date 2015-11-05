@@ -1,0 +1,265 @@
+{
+  "name": "Untitled", 
+  "width": 1397, 
+  "height": 2534, 
+  "layers": [
+    {
+      "name": "hardware.ini", 
+      "width": 1054, 
+      "height": 1896, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
+      "offsets": [
+        173, 
+        286
+      ], 
+      "mask": null
+    }, 
+    {
+      "name": "portrait", 
+      "width": 1397, 
+      "height": 2526, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
+      "offsets": [
+        0, 
+        0
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "volume-up_port.png", 
+          "width": 102, 
+          "height": 195, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            17, 
+            516
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-down_port.png", 
+          "width": 102, 
+          "height": 217, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            17, 
+            704
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "power_port.png", 
+          "width": 104, 
+          "height": 182, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            1275, 
+            358
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen_port.png", 
+          "width": 1080, 
+          "height": 1920, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            156, 
+            268
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "background_port.png", 
+          "width": 1397, 
+          "height": 2526, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            0, 
+            0
+          ], 
+          "mask": null
+        }
+      ]
+    }, 
+    {
+      "name": "landscape", 
+      "width": 2526, 
+      "height": 1397, 
+      "visible": false, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
+      "offsets": [
+        -569, 
+        568
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "volume-up_land.png", 
+          "width": 195, 
+          "height": 102, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -53, 
+            1846
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-down_land.png", 
+          "width": 217, 
+          "height": 102, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            135, 
+            1846
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "power_land.png", 
+          "width": 182, 
+          "height": 104, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -211, 
+            586
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen_land.png", 
+          "width": 1920, 
+          "height": 1080, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -301, 
+            729
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "background_land.png", 
+          "width": 2526, 
+          "height": 1397, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -569, 
+            568
+          ], 
+          "mask": null
+        }
+      ]
+    }, 
+    {
+      "name": "phone", 
+      "width": 1397, 
+      "height": 2534, 
+      "visible": false, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
+      "offsets": [
+        0, 
+        0
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "Layer", 
+          "width": 1397, 
+          "height": 2534, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            0, 
+            0
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen.png", 
+          "width": 1080, 
+          "height": 1920, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            156, 
+            268
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "phone.png", 
+          "width": 1397, 
+          "height": 2534, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            0, 
+            0
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "shadow.png", 
+          "width": 1156, 
+          "height": 176, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 71.76470588235294, 
+          "mode": 0, 
+          "offsets": [
+            121, 
+            2358
+          ], 
+          "mask": null
+        }
+      ]
+    }
+  ]
+}

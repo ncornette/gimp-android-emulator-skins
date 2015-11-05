@@ -1,3 +1,4 @@
+
 parts {
    device {
         display {
@@ -14,20 +15,21 @@ parts {
         }
 
         buttons {
+            
             volume-up {
                 image   volume-up_port.png
-                x       287
-                y       511
+                x       17
+                y       516
             }
             volume-down {
                 image   volume-down_port.png
-                x       287
-                y       706
+                x       17
+                y       704
             }
             power {
                 image   power_port.png
-                x       1483
-                y       355
+                x       1275
+                y       358
             }
         }
     }
@@ -38,20 +40,21 @@ parts {
         }
 
         buttons {
+            
             volume-up {
                 image   volume-up_land.png
-                x       511
-                y       1488
+                x       516
+                y       1278
             }
             volume-down {
                 image   volume-down_land.png
-                x       706
-                y       1488
+                x       704
+                y       1278
             }
             power {
                 image   power_land.png
-                x       355
-                y       292
+                x       358
+                y       18
             }
         }
     }
@@ -59,8 +62,8 @@ parts {
 
 layouts {
     portrait {
-        width     1817
-        height    2526
+        width     1397
+        height    2526 
         color     0x555555
         
         part1 {
@@ -71,14 +74,14 @@ layouts {
 
         part2 {
             name    device
-            x       366
-            y       267
+            x       156
+            y       268
         }
     }
     
     landscape {
         width     2526
-        height    1817
+        height    1397
         color     0x555555
         
         part1 {
@@ -89,8 +92,8 @@ layouts {
 
         part2 {
             name   device
-            x      267
-            y      1452
+            x      268
+            y      1241
             rotation 3
         }
     }

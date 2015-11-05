@@ -1,113 +1,235 @@
 {
-  "layers": {
-    "background_land.png": {
-      "width": 1226, 
-      "height": 640, 
-      "offsets": [
-        -293, 
-        293
-      ]
-    }, 
-    "home_land.png": {
-      "width": 60, 
-      "height": 60, 
-      "offsets": [
-        656, 
-        523
-      ]
-    }, 
-    "screen_land.png": {
-      "width": 800, 
-      "height": 480, 
-      "offsets": [
-        -157, 
-        374
-      ]
-    }, 
-    "back_land.png": {
-      "width": 60, 
-      "height": 60, 
-      "offsets": [
-        656, 
-        767
-      ]
-    }, 
-    "back_port.png": {
-      "width": 60, 
-      "height": 60, 
-      "offsets": [
-        106, 
-        949
-      ]
-    }, 
-    "overlay.png": {
+  "name": "Untitled", 
+  "width": 640, 
+  "height": 1226, 
+  "layers": [
+    {
+      "name": "overlay.png", 
       "width": 480, 
       "height": 800, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
         79, 
         136
-      ]
+      ], 
+      "mask": null
     }, 
-    "search_land.png": {
-      "width": 60, 
-      "height": 60, 
+    {
+      "name": "hardware.ini", 
+      "width": 464, 
+      "height": 776, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
-        656, 
-        401
-      ]
+        89, 
+        146
+      ], 
+      "mask": null
     }, 
-    "background_port.png": {
+    {
+      "name": "portrait", 
       "width": 640, 
       "height": 1226, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
         0, 
         0
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "search_port.png", 
+          "width": 60, 
+          "height": 60, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            472, 
+            949
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "home_port.png", 
+          "width": 60, 
+          "height": 60, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            350, 
+            949
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "soft-left_port.png", 
+          "width": 60, 
+          "height": 60, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            229, 
+            949
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "back_port.png", 
+          "width": 60, 
+          "height": 60, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            106, 
+            949
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen_port.png", 
+          "width": 480, 
+          "height": 800, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            79, 
+            136
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "background_port.png", 
+          "width": 640, 
+          "height": 1226, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            0, 
+            0
+          ], 
+          "mask": null
+        }
       ]
     }, 
-    "soft-left_port.png": {
-      "width": 60, 
-      "height": 60, 
+    {
+      "name": "landscape", 
+      "width": 1226, 
+      "height": 640, 
+      "visible": false, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
       "offsets": [
-        229, 
-        949
-      ]
-    }, 
-    "search_port.png": {
-      "width": 60, 
-      "height": 60, 
-      "offsets": [
-        472, 
-        949
-      ]
-    }, 
-    "soft-left_land.png": {
-      "width": 60, 
-      "height": 60, 
-      "offsets": [
-        656, 
-        644
-      ]
-    }, 
-    "home_port.png": {
-      "width": 60, 
-      "height": 60, 
-      "offsets": [
-        350, 
-        949
-      ]
-    }, 
-    "screen_port.png": {
-      "width": 480, 
-      "height": 800, 
-      "offsets": [
-        79, 
-        136
+        -293, 
+        293
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "search_land.png", 
+          "width": 60, 
+          "height": 60, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            656, 
+            401
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "home_land.png", 
+          "width": 60, 
+          "height": 60, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            656, 
+            523
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "soft-left_land.png", 
+          "width": 60, 
+          "height": 60, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            656, 
+            644
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "back_land.png", 
+          "width": 60, 
+          "height": 60, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            656, 
+            767
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen_land.png", 
+          "width": 800, 
+          "height": 480, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -157, 
+            374
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "background_land.png", 
+          "width": 1226, 
+          "height": 640, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -293, 
+            293
+          ], 
+          "mask": null
+        }
       ]
     }
-  }, 
-  "image": {
-    "width": 640, 
-    "name": "Untitled", 
-    "height": 1226
-  }
+  ]
 }
