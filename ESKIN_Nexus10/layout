@@ -1,5 +1,5 @@
+
 parts {
-   
    device {
         display {
             width   1600
@@ -13,56 +13,60 @@ parts {
         background {
             image   background_port.png
         }
-	buttons {
-	power {
-		image   button_vertical.png
-		x	2065
-		y	216
-	}
-	volume-up {
-		image   button_vertical.png
-		x	2080
-		y	425
-	}
-	volume-down {
-		image   button_vertical.png
-		x	2080
-		y	570
-	}
-	}
+
+        buttons {
+            
+            power {
+                image   power_port.png
+                x       2169
+                y       335
+            }
+            volume-up {
+                image   volume-up_port.png
+                x       2179
+                y       549
+            }
+            volume-down {
+                image   volume-down_port.png
+                x       2182
+                y       667
+            }
+        }
     }
     
     landscape {
-	background {
-		image   background_land.png
-	}
-	buttons {
-	power {
-		image   button_horizontal.png
-		x	216
-		y	7
-	}
-	volume-up {
-		image   button_horizontal.png
-		x	423
-		y	0
-	}
-	volume-down {
-		image   button_horizontal.png
-		x	573
-		y	0
-	}
-	}
+        background {
+            image   background_land.png
+        }
+
+        buttons {
+            
+            power {
+                image   power_land.png
+                x       335
+                y       21
+            }
+            volume-up {
+                image   volume-up_land.png
+                x       549
+                y       25
+            }
+            volume-down {
+                image   volume-down_land.png
+                x       667
+                y       27
+            }
+        }
     }
 }
 
 layouts {
     portrait {
-        width     2107
-        height    3091
-        color     0xffffff
+        width     2292
+        height    3320 
+        color     0x555555
         event     EV_SW:0:1
-        
+
         part1 {
             name    portrait
             x       0
@@ -71,15 +75,15 @@ layouts {
 
         part2 {
             name    device
-            x       238
-            y       264
+            x       330
+            y       379
         }
     }
     
     landscape {
-        width     3091
-        height    2107
-        color     0xffffff
+        width     3320
+        height    2292
+        color     0x555555
         event     EV_SW:0:0
         
         part1 {
@@ -89,15 +93,11 @@ layouts {
         }
 
         part2 {
-            name    device
-            x       263
-            y       1868
-            rotation  3
+            name   device
+            x      379
+            y      1962
+            rotation 3
         }
     }
 }
 
-network {
-    speed  full
-    delay  none
-}

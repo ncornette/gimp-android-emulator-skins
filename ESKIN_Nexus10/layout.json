@@ -1,0 +1,207 @@
+{
+  "name": "Untitled", 
+  "width": 2292, 
+  "height": 3320, 
+  "layers": [
+    {
+      "name": "hardware.ini", 
+      "width": 1574, 
+      "height": 2529, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
+      "offsets": [
+        352, 
+        407
+      ], 
+      "mask": null
+    }, 
+    {
+      "name": "overlay", 
+      "width": 2292, 
+      "height": 3320, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
+      "offsets": [
+        0, 
+        0
+      ], 
+      "mask": null
+    }, 
+    {
+      "name": "portrait", 
+      "width": 2292, 
+      "height": 3320, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
+      "offsets": [
+        0, 
+        0
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "power_port.png", 
+          "width": 102, 
+          "height": 127, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            2169, 
+            335
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-up_port.png", 
+          "width": 91, 
+          "height": 118, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            2179, 
+            549
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-down_port.png", 
+          "width": 83, 
+          "height": 118, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            2182, 
+            667
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen_port.png", 
+          "width": 1600, 
+          "height": 2560, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            330, 
+            379
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "background_port.png", 
+          "width": 2292, 
+          "height": 3320, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            0, 
+            0
+          ], 
+          "mask": null
+        }
+      ]
+    }, 
+    {
+      "name": "landscape", 
+      "width": 3320, 
+      "height": 2292, 
+      "visible": true, 
+      "linked": false, 
+      "opacity": 100.0, 
+      "mode": 0, 
+      "offsets": [
+        -514, 
+        514
+      ], 
+      "mask": null, 
+      "layers": [
+        {
+          "name": "power_land.png", 
+          "width": 127, 
+          "height": 102, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -179, 
+            535
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-up_land.png", 
+          "width": 118, 
+          "height": 88, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            35, 
+            539
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "volume-down_land.png", 
+          "width": 118, 
+          "height": 83, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            153, 
+            541
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "screen_land.png", 
+          "width": 2560, 
+          "height": 1600, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -135, 
+            876
+          ], 
+          "mask": null
+        }, 
+        {
+          "name": "background_land.png", 
+          "width": 3320, 
+          "height": 2292, 
+          "visible": true, 
+          "linked": false, 
+          "opacity": 100.0, 
+          "mode": 0, 
+          "offsets": [
+            -514, 
+            514
+          ], 
+          "mask": null
+        }
+      ]
+    }
+  ]
+}
