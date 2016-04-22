@@ -328,4 +328,12 @@ if __name__ == '__main__':
             ])
         ])
 
-    assert json.loads(json.dumps(im))
+    assert str(json.loads(json.dumps(im))) == """\
+GimpObject(layers=[\
+GimpObject(width=80, name=u'layer_1', height=60), \
+GimpObject(width=80, name=u'Layer_2', height=60), \
+GimpObject(layers=[\
+GimpObject(width=80, name=u'layer_A1', height=60), \
+GimpObject(width=80, name=u'Layer_A2', height=60)], \
+width=80, name=u'group_A', height=60)], \
+width=80, name=u'Image', height=60)"""
